@@ -27,12 +27,10 @@
 
 namespace dip {
 
+namespace {
 class DIP_EXPORT UniformScanLineFilter : public Framework::ScanLineFilter {
    public:
-      // Make the class non copyable (generatorArray_ cannot be copied)
-      UniformScanLineFilter(const UniformScanLineFilter&) = delete;
-      UniformScanLineFilter& operator =(const UniformScanLineFilter&) = delete;
-
+      virtual dip::uint GetNumberOfOperations( dip::uint, dip::uint, dip::uint ) { return 40; }
       virtual void Filter( Framework::ScanLineFilterParameters const& params ) override {
          dfloat const* in = static_cast< dfloat const* >( params.inBuffer[ 0 ].buffer );
          dip::sint inStride = params.inBuffer[ 0 ].stride;
@@ -66,6 +64,7 @@ class DIP_EXPORT UniformScanLineFilter : public Framework::ScanLineFilter {
       dfloat lowerBound_;
       dfloat upperBound_;
 };
+} // namespace
 
 void UniformNoise( Image const& in, Image& out, Random& random, dfloat lowerBound, dfloat upperBound ) {
    DIP_THROW_IF( !in.IsForged(), E::IMAGE_NOT_FORGED );
@@ -75,12 +74,10 @@ void UniformNoise( Image const& in, Image& out, Random& random, dfloat lowerBoun
    Framework::ScanMonadic( in, out, DT_DFLOAT, dt, 1, filter, Framework::Scan_TensorAsSpatialDim );
 }
 
+namespace {
 class DIP_EXPORT GaussianScanLineFilter : public Framework::ScanLineFilter {
    public:
-      // Make the class non copyable (generatorArray_ cannot be copied)
-      GaussianScanLineFilter(const GaussianScanLineFilter&) = delete;
-      GaussianScanLineFilter& operator =(const GaussianScanLineFilter&) = delete;
-
+      virtual dip::uint GetNumberOfOperations( dip::uint, dip::uint, dip::uint ) { return 150; }
       virtual void Filter( Framework::ScanLineFilterParameters const& params ) override {
          dfloat const* in = static_cast< dfloat const* >( params.inBuffer[ 0 ].buffer );
          dip::sint inStride = params.inBuffer[ 0 ].stride;
@@ -96,7 +93,7 @@ class DIP_EXPORT GaussianScanLineFilter : public Framework::ScanLineFilter {
       }
       virtual void SetNumberOfThreads( dip::uint threads ) override  {
          generatorArray_.resize( threads );
-         generatorArray_[ 0 ] = std::make_unique< GaussianRandomGenerator >( random_ );
+         generatorArray_[ 0 ] = std::unique_ptr< GaussianRandomGenerator >( new GaussianRandomGenerator( random_ ));
          if( threads > 1 ) {
             randomArray_.resize( threads - 1, Random( 0 ));
             for( dip::uint ii = 1; ii < threads; ++ii ) {
@@ -113,6 +110,7 @@ class DIP_EXPORT GaussianScanLineFilter : public Framework::ScanLineFilter {
       std::vector< std::unique_ptr< GaussianRandomGenerator >> generatorArray_;
       dfloat std_;
 };
+} // namespace
 
 void GaussianNoise( Image const& in, Image& out, Random& random, dfloat variance ) {
    DIP_THROW_IF( !in.IsForged(), E::IMAGE_NOT_FORGED );
@@ -122,12 +120,10 @@ void GaussianNoise( Image const& in, Image& out, Random& random, dfloat variance
    Framework::ScanMonadic( in, out, DT_DFLOAT, dt, 1, filter, Framework::Scan_TensorAsSpatialDim );
 }
 
+namespace {
 class DIP_EXPORT PoissonScanLineFilter : public Framework::ScanLineFilter {
    public:
-      // Make the class non copyable (generatorArray_ cannot be copied)
-      PoissonScanLineFilter(const PoissonScanLineFilter&) = delete;
-      PoissonScanLineFilter& operator =(const PoissonScanLineFilter&) = delete;
-
+      virtual dip::uint GetNumberOfOperations( dip::uint, dip::uint, dip::uint ) { return 800; }
       virtual void Filter( Framework::ScanLineFilterParameters const& params ) override {
          dfloat const* in = static_cast< dfloat const* >( params.inBuffer[ 0 ].buffer );
          dip::sint inStride = params.inBuffer[ 0 ].stride;
@@ -160,6 +156,7 @@ class DIP_EXPORT PoissonScanLineFilter : public Framework::ScanLineFilter {
       std::vector< std::unique_ptr< PoissonRandomGenerator >> generatorArray_;
       dfloat conversion_;
 };
+} // namespace
 
 void PoissonNoise( Image const& in, Image& out, Random& random, dfloat conversion ) {
    DIP_THROW_IF( !in.IsForged(), E::IMAGE_NOT_FORGED );
@@ -169,12 +166,10 @@ void PoissonNoise( Image const& in, Image& out, Random& random, dfloat conversio
    Framework::ScanMonadic( in, out, DT_DFLOAT, dt, 1, filter, Framework::Scan_TensorAsSpatialDim );
 }
 
+namespace {
 class DIP_EXPORT BinaryScanLineFilter : public Framework::ScanLineFilter {
    public:
-      // Make the class non copyable (generatorArray_ cannot be copied)
-      BinaryScanLineFilter(const BinaryScanLineFilter&) = delete;
-      BinaryScanLineFilter& operator =(const BinaryScanLineFilter&) = delete;
-
+      virtual dip::uint GetNumberOfOperations( dip::uint, dip::uint, dip::uint ) { return 40; }
       virtual void Filter( Framework::ScanLineFilterParameters const& params ) override {
          bin const* in = static_cast< bin const* >( params.inBuffer[ 0 ].buffer );
          dip::sint inStride = params.inBuffer[ 0 ].stride;
@@ -208,6 +203,7 @@ class DIP_EXPORT BinaryScanLineFilter : public Framework::ScanLineFilter {
       dfloat pForeground;
       dfloat pBackground;
 };
+} // namespace
 
 void BinaryNoise( Image const& in, Image& out, Random& random, dfloat p10, dfloat p01 ) {
    DIP_THROW_IF( !in.IsForged(), E::IMAGE_NOT_FORGED );
