@@ -29,6 +29,10 @@ namespace dip {
 
 class DIP_EXPORT UniformScanLineFilter : public Framework::ScanLineFilter {
    public:
+      // Make the class non copyable (generatorArray_ cannot be copied)
+      UniformScanLineFilter(const UniformScanLineFilter&) = delete;
+      UniformScanLineFilter& operator =(const UniformScanLineFilter&) = delete;
+
       virtual void Filter( Framework::ScanLineFilterParameters const& params ) override {
          dfloat const* in = static_cast< dfloat const* >( params.inBuffer[ 0 ].buffer );
          dip::sint inStride = params.inBuffer[ 0 ].stride;
@@ -73,6 +77,10 @@ void UniformNoise( Image const& in, Image& out, Random& random, dfloat lowerBoun
 
 class DIP_EXPORT GaussianScanLineFilter : public Framework::ScanLineFilter {
    public:
+      // Make the class non copyable (generatorArray_ cannot be copied)
+      GaussianScanLineFilter(const GaussianScanLineFilter&) = delete;
+      GaussianScanLineFilter& operator =(const GaussianScanLineFilter&) = delete;
+
       virtual void Filter( Framework::ScanLineFilterParameters const& params ) override {
          dfloat const* in = static_cast< dfloat const* >( params.inBuffer[ 0 ].buffer );
          dip::sint inStride = params.inBuffer[ 0 ].stride;
@@ -88,7 +96,7 @@ class DIP_EXPORT GaussianScanLineFilter : public Framework::ScanLineFilter {
       }
       virtual void SetNumberOfThreads( dip::uint threads ) override  {
          generatorArray_.resize( threads );
-         generatorArray_[ 0 ] = std::unique_ptr< GaussianRandomGenerator >( new GaussianRandomGenerator( random_ ));
+         generatorArray_[ 0 ] = std::make_unique< GaussianRandomGenerator >( random_ );
          if( threads > 1 ) {
             randomArray_.resize( threads - 1, Random( 0 ));
             for( dip::uint ii = 1; ii < threads; ++ii ) {
@@ -116,6 +124,10 @@ void GaussianNoise( Image const& in, Image& out, Random& random, dfloat variance
 
 class DIP_EXPORT PoissonScanLineFilter : public Framework::ScanLineFilter {
    public:
+      // Make the class non copyable (generatorArray_ cannot be copied)
+      PoissonScanLineFilter(const PoissonScanLineFilter&) = delete;
+      PoissonScanLineFilter& operator =(const PoissonScanLineFilter&) = delete;
+
       virtual void Filter( Framework::ScanLineFilterParameters const& params ) override {
          dfloat const* in = static_cast< dfloat const* >( params.inBuffer[ 0 ].buffer );
          dip::sint inStride = params.inBuffer[ 0 ].stride;
@@ -159,6 +171,10 @@ void PoissonNoise( Image const& in, Image& out, Random& random, dfloat conversio
 
 class DIP_EXPORT BinaryScanLineFilter : public Framework::ScanLineFilter {
    public:
+      // Make the class non copyable (generatorArray_ cannot be copied)
+      BinaryScanLineFilter(const BinaryScanLineFilter&) = delete;
+      BinaryScanLineFilter& operator =(const BinaryScanLineFilter&) = delete;
+
       virtual void Filter( Framework::ScanLineFilterParameters const& params ) override {
          bin const* in = static_cast< bin const* >( params.inBuffer[ 0 ].buffer );
          dip::sint inStride = params.inBuffer[ 0 ].stride;
