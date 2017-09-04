@@ -1204,6 +1204,9 @@ public:
         return baseclass::period_pow2() + table_size*extvalclass::period_pow2();
     }
 
+#ifdef __GNUC__ // Defined also for g++ and clang
+    __attribute__((always_inline))
+#endif
     result_type operator()()
     {
         result_type rhs = get_extended_value();
