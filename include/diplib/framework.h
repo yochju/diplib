@@ -476,7 +476,7 @@ inline void ScanDyadic(
 /// `dip::Framework::NewMonadicScanLineFilter`, `dip::Framework::NewDyadicScanLineFilter`,
 /// `dip::Framework::NewTriadicScanLineFilter`, `dip::Framework::NewTetradicScanLineFilter`.
 template< dip::uint N, typename TPI, typename F >
-class DIP_EXPORT VariadicScanLineFilter : public ScanLineFilter {
+class VariadicScanLineFilter : public ScanLineFilter {
    // Note that N is a compile-time constant, and consequently the compiler should be able to optimize all the loops
    // over N.
    public:

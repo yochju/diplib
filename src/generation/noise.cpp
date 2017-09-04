@@ -27,7 +27,6 @@
 
 namespace dip {
 
-namespace {
 class DIP_EXPORT UniformScanLineFilter : public Framework::ScanLineFilter {
    public:
       virtual void Filter( Framework::ScanLineFilterParameters const& params ) override {
@@ -63,7 +62,6 @@ class DIP_EXPORT UniformScanLineFilter : public Framework::ScanLineFilter {
       dfloat lowerBound_;
       dfloat upperBound_;
 };
-} // namespace
 
 void UniformNoise( Image const& in, Image& out, Random& random, dfloat lowerBound, dfloat upperBound ) {
    DIP_THROW_IF( !in.IsForged(), E::IMAGE_NOT_FORGED );
@@ -73,7 +71,6 @@ void UniformNoise( Image const& in, Image& out, Random& random, dfloat lowerBoun
    Framework::ScanMonadic( in, out, DT_DFLOAT, dt, 1, filter, Framework::Scan_TensorAsSpatialDim );
 }
 
-namespace {
 class DIP_EXPORT GaussianScanLineFilter : public Framework::ScanLineFilter {
    public:
       virtual void Filter( Framework::ScanLineFilterParameters const& params ) override {
@@ -108,7 +105,6 @@ class DIP_EXPORT GaussianScanLineFilter : public Framework::ScanLineFilter {
       std::vector< std::unique_ptr< GaussianRandomGenerator >> generatorArray_;
       dfloat std_;
 };
-} // namespace
 
 void GaussianNoise( Image const& in, Image& out, Random& random, dfloat variance ) {
    DIP_THROW_IF( !in.IsForged(), E::IMAGE_NOT_FORGED );
@@ -118,7 +114,6 @@ void GaussianNoise( Image const& in, Image& out, Random& random, dfloat variance
    Framework::ScanMonadic( in, out, DT_DFLOAT, dt, 1, filter, Framework::Scan_TensorAsSpatialDim );
 }
 
-namespace {
 class DIP_EXPORT PoissonScanLineFilter : public Framework::ScanLineFilter {
    public:
       virtual void Filter( Framework::ScanLineFilterParameters const& params ) override {
@@ -153,7 +148,6 @@ class DIP_EXPORT PoissonScanLineFilter : public Framework::ScanLineFilter {
       std::vector< std::unique_ptr< PoissonRandomGenerator >> generatorArray_;
       dfloat conversion_;
 };
-} // namespace
 
 void PoissonNoise( Image const& in, Image& out, Random& random, dfloat conversion ) {
    DIP_THROW_IF( !in.IsForged(), E::IMAGE_NOT_FORGED );
@@ -163,7 +157,6 @@ void PoissonNoise( Image const& in, Image& out, Random& random, dfloat conversio
    Framework::ScanMonadic( in, out, DT_DFLOAT, dt, 1, filter, Framework::Scan_TensorAsSpatialDim );
 }
 
-namespace {
 class DIP_EXPORT BinaryScanLineFilter : public Framework::ScanLineFilter {
    public:
       virtual void Filter( Framework::ScanLineFilterParameters const& params ) override {
@@ -199,7 +192,6 @@ class DIP_EXPORT BinaryScanLineFilter : public Framework::ScanLineFilter {
       dfloat pForeground;
       dfloat pBackground;
 };
-} // namespace
 
 void BinaryNoise( Image const& in, Image& out, Random& random, dfloat p10, dfloat p01 ) {
    DIP_THROW_IF( !in.IsForged(), E::IMAGE_NOT_FORGED );
