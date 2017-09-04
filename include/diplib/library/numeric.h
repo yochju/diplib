@@ -128,16 +128,9 @@ div_floor( T lhs, T rhs ) {
    }
 }
 
-/// \brief Integer division, unsigned, return rounded.
+/// \brief Integer division, return rounded.
 template <typename T>
-typename std::enable_if<std::is_integral<T>::value && !std::is_signed<T>::value, T>::type
-div_round( T lhs, T rhs ) {
-   return div_floor( lhs + rhs / 2, rhs );
-}
-
-/// \brief Integer division, signed, return rounded.
-template <typename T>
-typename std::enable_if<std::is_integral<T>::value && std::is_signed<T>::value, T>::type
+typename std::enable_if<std::is_integral<T>::value, T>::type
 div_round( T lhs, T rhs ) {
    return div_floor( lhs + rhs / 2, rhs );
 }
