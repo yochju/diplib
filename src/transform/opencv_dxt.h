@@ -55,6 +55,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#pragma once
+
+#ifdef _WIN32
+   #define _USE_MATH_DEFINES // Needed to define M_PI in <complex>/<cmath>
+#endif
+
 #include <complex>
 #include <vector>
 #include <cstring>

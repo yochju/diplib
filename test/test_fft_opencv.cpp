@@ -1,10 +1,10 @@
+#include "../src/transform/opencv_dxt.h"
+
 #include <iostream>
 #include <typeinfo>
 #include <chrono>
 
 #undef DIP__ENABLE_DOCTEST
-
-#include "../src/transform/opencv_dxt.h"
 
 #ifndef M_PIl
 #define M_PIl 3.1415926535897932384626433832795029L

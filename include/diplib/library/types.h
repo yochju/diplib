@@ -28,12 +28,17 @@
 #ifndef DIP_TYPES_H
 #define DIP_TYPES_H
 
+#ifdef _WIN32
+   #define _USE_MATH_DEFINES // Needed to define M_PI in <complex>/<cmath>
+#endif
+
 #include <cstddef>   // std::size_t, std::ptrdiff_t
 #include <cstdint>   // std::uint8_t, etc.
 #include <complex>
 #include <vector>
 #include <string>
 #include <set>
+#include <cctype>
 
 #include "diplib/library/dimension_array.h"
 
