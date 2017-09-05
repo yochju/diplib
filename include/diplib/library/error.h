@@ -52,7 +52,9 @@ namespace dip {
 /// You can catch this exception at the top level, where you can communicate the problem to the user,
 /// and only if you want to prevent your program from exiting abnormally.
 /// This class is derived from `std::exception`, so you can choose to catch that instead.
-class DIP_EXPORT Error : public std::exception {
+///
+/// Keep this class header-only to avoid exporting std::exception, which can cause problems with DLL's
+class Error : public std::exception {
 
    public:
 
@@ -94,7 +96,7 @@ class DIP_EXPORT Error : public std::exception {
 /// You shouldn't need to catch exceptions of this type.
 ///
 /// To throw an exception of this type, use the `#DIP_THROW_ASSERTION` and `#DIP_ASSERT` macros.
-class DIP_EXPORT AssertionError : public Error {
+class AssertionError : public Error {
       using Error::Error;
 };
 
@@ -104,7 +106,7 @@ class DIP_EXPORT AssertionError : public Error {
 /// Catch exceptions of this type only if you don't control the input arguments (i.e. in a use interface).
 ///
 /// To throw an exception of this type, use the `#DIP_THROW` and `#DIP_THROW_IF` macros.
-class DIP_EXPORT ParameterError : public Error {
+class ParameterError : public Error {
       using Error::Error;
 };
 
@@ -115,7 +117,7 @@ class DIP_EXPORT ParameterError : public Error {
 /// library functions catch and translate this exception.
 ///
 /// To throw an exception of this type, use the `#DIP_THROW_RUNTIME` macro.
-class DIP_EXPORT RunTimeError : public Error {
+class RunTimeError : public Error {
       using Error::Error;
 };
 
