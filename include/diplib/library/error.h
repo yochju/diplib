@@ -52,15 +52,11 @@ namespace dip {
 /// You can catch this exception at the top level, where you can communicate the problem to the user,
 /// and only if you want to prevent your program from exiting abnormally.
 /// This class is derived from `std::exception`, so you can choose to catch that instead.
-///
-/// Keep this class header-only to avoid exporting std::exception, which can cause problems with DLL's
-class Error : public std::exception {
-
+class DIP_EXPORT Error : public std::exception {
    public:
-
       Error() = default;
       explicit Error( char const* message ) : message_( message ) {}
-      explicit Error( const std::string& message ) : message_( message ) {};
+      explicit Error( std::string message ) : message_( std::move( message )) {};
 
       /// \brief Return a message indicating what caused the exception to be thrown, as well as the location
       /// where the error occurred.
@@ -71,7 +67,7 @@ class Error : public std::exception {
       /// and re-throw the exception.
       ///
       /// \see DIP_ADD_STACK_TRACE, DIP_TRY, DIP_CATCH
-      virtual char const* what() const noexcept override {
+      char const* what() const noexcept override {
          return message_.c_str();
       }
 
@@ -92,7 +88,6 @@ class Error : public std::exception {
       }
 
    private:
-
       std::string message_;
 };
 
@@ -101,7 +96,7 @@ class Error : public std::exception {
 /// You shouldn't need to catch exceptions of this type.
 ///
 /// To throw an exception of this type, use the `#DIP_THROW_ASSERTION` and `#DIP_ASSERT` macros.
-class AssertionError : public Error {
+class DIP_EXPORT AssertionError : public Error {
       using Error::Error;
 };
 
@@ -111,7 +106,7 @@ class AssertionError : public Error {
 /// Catch exceptions of this type only if you don't control the input arguments (i.e. in a use interface).
 ///
 /// To throw an exception of this type, use the `#DIP_THROW` and `#DIP_THROW_IF` macros.
-class ParameterError : public Error {
+class DIP_EXPORT ParameterError : public Error {
       using Error::Error;
 };
 
@@ -122,7 +117,7 @@ class ParameterError : public Error {
 /// library functions catch and translate this exception.
 ///
 /// To throw an exception of this type, use the `#DIP_THROW_RUNTIME` macro.
-class RunTimeError : public Error {
+class DIP_EXPORT RunTimeError : public Error {
       using Error::Error;
 };
 
@@ -233,7 +228,7 @@ constexpr char const* ILLEGAL_CONNECTIVITY = "Illegal connectivity value";
 #define DIP_THROW( str ) do { auto e = dip::ParameterError( str ); DIP_ADD_STACK_TRACE( e ); throw e; } while( false )
 
 /// \brief Throw a `dip::ParameterError` that reads "Invalid flag: <flag>".
-#define DIP_THROW_INVALID_FLAG( flag ) DIP_THROW( "Invalid flag: " + String( flag ));
+#define DIP_THROW_INVALID_FLAG( flag ) DIP_THROW( "Invalid flag: " + std::string( flag ));
 
 /// \brief Test a condition, throw a `dip::ParameterError` if the condition is met.
 #define DIP_THROW_IF( test, str ) do { if( test ) DIP_THROW( str ); } while( false )
