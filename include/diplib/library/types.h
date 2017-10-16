@@ -223,6 +223,9 @@ class DIP_NO_EXPORT bin {
       /// Exclusive-or operator
       constexpr bin operator^( bin other ) const { return bin( v_ ^ other.v_ ); }
 
+      /// Allow explicit casting to a reference to the underlying type (uint8&) for binary image operations
+      explicit operator uint8&() { return v_; }
+
    private:
       uint8 v_;
 };
