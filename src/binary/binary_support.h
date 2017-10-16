@@ -38,41 +38,6 @@ namespace dip
 template< typename T >
 using queue = std::deque< T >;
 
-/// Masks the first sample of each border pixel with the given mask
-/// and resets the mask for each (first sample of each) non-border pixel.
-class BinaryBorderMasker : public BorderProcessor< dip::bin > {
-public:
-   BinaryBorderMasker( Image& out, uint8 borderMask, dip::uint borderWidth = 1 ) : BorderProcessor< dip::bin >( out, borderWidth ), borderMask_( borderMask ), invBorderMask_( ~borderMask ) {}
-
-protected:
-   uint8 borderMask_;
-   uint8 invBorderMask_;
-
-   // Bitwise-OR the border mask onto the first sample of the pixel
-   virtual void ProcessBorderPixel( dip::bin* pPixel ) {
-      static_cast<uint8&>(*pPixel) |= borderMask_;
-   }
-
-   // Bitwise-AND the inverted border mask onto the first sample of the pixel
-   virtual void ProcessNonBorderPixel( dip::bin* pPixel ) {
-      static_cast<uint8&>(*pPixel) &= invBorderMask_;
-   }
-
-};
-
-class BinaryBorderMaskClearer : public BinaryBorderMasker {
-public:
-   BinaryBorderMaskClearer( Image& out, uint8 borderMask, dip::uint borderWidth = 1 ) : BinaryBorderMasker( out, borderMask, borderWidth ) {}
-protected:
-   /// Bitwise-AND the inverted border mask onto the first sample of the pixel to clear the border mask
-   virtual void ProcessBorderPixel( dip::bin* pPixel ) {
-      static_cast<uint8&>(*pPixel) &= invBorderMask_;
-   }
-
-   /// No operation on non-border pixels
-   virtual void ProcessNonBorderPixel( dip::bin* pPixel ) {}
-};
-
 /// Masks all border pixels of a binary image with the given mask
 /// and resets the mask for non-border pixels.
 void ApplyBinaryBorderMask( Image& out, uint8 borderMask );
