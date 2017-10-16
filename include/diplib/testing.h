@@ -62,11 +62,6 @@ inline dip::sint Round( bin v, int /*digits*/) {
    return v;
 }
 
-// Since dip::bin is a class, create a separate template specialization for it
-inline dip::bin Round( dip::bin v, int /*digits*/ ) {
-   return v;
-}
-
 // For floating-point types
 template< typename T, typename std::enable_if< !std::is_integral< T >::value, int >::type = 0 >
 T Round( T v, int digits ) {
