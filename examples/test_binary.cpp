@@ -69,7 +69,7 @@ int main( int argc, char** argv ) {
    dip::Image org2d; // 2D original image
    dip::ImageReadTIFF( org2d, inputPath + "erika" );
    dip::Image org2dBin = org2d > 100;
-   dip::Image ramp2d = dip::CreateRamp( dip::Image( dip::UnsignedArray{ 256, 256 }, 1, dip::DT_SFLOAT ), 0 );
+   dip::Image ramp2d = dip::CreateRamp( dip::UnsignedArray{ 256, 256 }, 1 );
    dip::Image ramp2dBin = ramp2d > 100;
    std::vector< dip::Image > dilations2d;
    std::vector< dip::Image > erosions2d;
@@ -120,7 +120,7 @@ int main( int argc, char** argv ) {
    std::vector< dip::Image > dilations3d;
    std::vector< dip::Image > erosions3d;
    std::vector< dip::Image > propagations3d;
-   dip::Image ramp3d = dip::CreateRamp( dip::Image( dip::UnsignedArray{ 64, 64, 64 }, 1, dip::DT_SFLOAT ), 0 );
+   dip::Image ramp3d = dip::CreateRamp( dip::UnsignedArray{ 64, 64, 64 }, 1 );
    dip::Image ramp3dBin = ramp3d > 28;
 
    timer.Reset();
